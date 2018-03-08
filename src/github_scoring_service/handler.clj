@@ -1,11 +1,33 @@
 (ns github-scoring-service.handler
-  (:require [compojure.core :refer :all]
+  (:require [clojure.string :as string] 
+            [compojure.core :refer :all]
             [compojure.route :as route]
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
+            [github-scoring-service.event_processor :as event]
+            [github-scoring-service.users :as users]
+            [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
+            [ring.middleware.json :as middleware]))
+
+(defn get-user-score-handler
+  [userID]
+  (let [user-score (users/get-user-score userID)]
+    {:status 200 :body {:user "Robert" :score user-score}}))
+
+(defn process-event-handler
+  [body]
+  (let [process-status (event/process-event body)]
+    {:status 200 :body {:result process-status}}))
+
+(defn health-check
+  "A health check endpoint that will also print the git hash"
+  []
+  {:status 200 :body (str "I'm Alive")})
 
 (defroutes app-routes
-  (GET "/" [] "Hello World")
+  (GET "/score/user/:userID" [userID] (get-user-score-handler userID))
+  (POST "/event" request (process-event-handler (:body request)))
+  (ANY "/health_check" [] (health-check))
   (route/not-found "Not Found"))
 
-(def app
-  (wrap-defaults app-routes site-defaults))
+(def app-handler (-> app-routes
+                     (middleware/wrap-json-response)
+                     (wrap-defaults api-defaults)))
