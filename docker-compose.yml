@@ -2,16 +2,17 @@ version: '2.1'
 
 services:
 
-  github_scoring_service:
+  score-keeper:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    env_file: ./env/server.env
     depends_on:
       database:
         condition: service_healthy
-
+ 
   database:
     image: mysql/mysql-server:5.7
     ports:

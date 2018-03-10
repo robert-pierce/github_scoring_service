@@ -2,4 +2,6 @@
   (:require [environ.core :refer [env]]))
 
 (def config 
-  {:use-database (env :use-database)})
+  {:db-username (env :db-username)
+   :db-password (env :db-password)
+   :db-url (env :db-url)})

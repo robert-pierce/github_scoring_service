@@ -6,4 +6,5 @@
 (defn init-app
   []
   (log :info "Initializing Github_Scoring_Service")
-  (log :info (str "Use a database? " (:use-database c/config))))
+  (log :info (str "Database Username: " (:db-username c/config)))
+  (log :info (str "Database Url: " (:db-url c/config))))
