@@ -2,5 +2,6 @@
   (:require [clojure.string :as str]))
 
 (defn process-event
-  [body]
-  (str "the event has been processed"))
+  [request]
+  (println request)
+  (:body request))

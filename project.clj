@@ -11,5 +11,4 @@
   :plugins [[lein-ring "0.9.7"]
             [lein-environ "1.0.2"]]
   :ring {:handler github-scoring-service.handler/app-handler
-         :port 8000
          :init github-scoring-service.init/init-app})

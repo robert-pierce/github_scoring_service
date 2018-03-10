@@ -13,8 +13,8 @@
     {:status 200 :body {:user "Robert" :score user-score}}))
 
 (defn process-event-handler
-  [body]
-  (let [process-status (event/process-event body)]
+  [request]
+  (let [process-status (event/process-event request)]
     {:status 200 :body {:result process-status}}))
 
 (defn health-check
@@ -24,10 +24,11 @@
 
 (defroutes app-routes
   (GET "/score/user/:userID" [userID] (get-user-score-handler userID))
-  (POST "/event" request (process-event-handler (:body request)))
+  (POST "/event" request (process-event-handler  request))
   (ANY "/health_check" [] (health-check))
   (route/not-found "Not Found"))
 
 (def app-handler (-> app-routes
                      (middleware/wrap-json-response)
+                     (middleware/wrap-json-body)
                      (wrap-defaults api-defaults)))
