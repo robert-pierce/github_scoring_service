@@ -15,21 +15,16 @@
 
 (defn process-event-handler
   [request]
-  (let [process-status (event/process-event request)]
-    {:status 200 :body {:result process-status}}))
+  (if-let [process-status (event/process-event request)]
+    {:status 200}
+    {:status 500}))
 
 (defn health-check
   "A health check endpoint that will also print the git hash"
   []
   {:status 200 :body (str "I'm Alive")})
 
-(defn test-db-handler
-  []
-  {:Status 200 :body (db/show-tables)})
-
-
 (defroutes app-routes
-  (GET "/testdb" [] (test-db-handler))
   (GET "/score/user/:userID" [userID] (get-user-score-handler userID))
   (POST "/event" request (process-event-handler  request))
   (ANY "/health_check" [] (health-check))
