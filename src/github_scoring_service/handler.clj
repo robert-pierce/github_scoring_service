@@ -4,6 +4,7 @@
             [compojure.route :as route]
             [github-scoring-service.event_processor :as event]
             [github-scoring-service.users :as users]
+            [github-scoring-service.db :as db]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.json :as middleware]))
 
@@ -22,7 +23,13 @@
   []
   {:status 200 :body (str "I'm Alive")})
 
+(defn test-db-handler
+  []
+  {:Status 200 :body (db/show-tables)})
+
+
 (defroutes app-routes
+  (GET "/testdb" [] (test-db-handler))
   (GET "/score/user/:userID" [userID] (get-user-score-handler userID))
   (POST "/event" request (process-event-handler  request))
   (ANY "/health_check" [] (health-check))
