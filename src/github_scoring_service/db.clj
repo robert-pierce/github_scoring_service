@@ -28,8 +28,15 @@
   ([repository]
    (sql/query db [(query/get-users-query repository)])))
 
+(defn get-repositories
+  ([]
+   (sql/query db [(query/get-repositories-query)]))
+  ([user]
+   (sql/query db [(query/get-repositories-query user)])))
+
 (defn get-user-score
   ([user]
    (sql/query db [(query/get-user-score-query user)]))
   ([user repository]
    (sql/query db [(query/get-user-score-query user repository)])))
+

@@ -8,6 +8,12 @@
   ([repository]
    (str "SELECT DISTINCT sender FROM events WHERE repository=\"" repository "\"")))
 
+(defn get-repositories-query
+  ([]
+   (str "SELECT DISTINCT repository FROM events"))
+  ([user]
+   (str "SELECT DISTINCT repository FROM events WHERE sender=\"" user "\"")))
+
 (defn get-user-score-query
   ([user]
    (str "SELECT SUM(point_value) FROM events WHERE sender=\"" user "\""))

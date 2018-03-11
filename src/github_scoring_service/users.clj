@@ -3,25 +3,34 @@
             [clj-log.core :refer :all]
             [github-scoring-service.db :as db]))
 
-(defn get-user-score
-  [userID]
-  42)
-
 (defn get-users
-  [repository]
-  (try
-    (if  (and (not (nil? repository)) (not (str/blank? repository)))
-      (db/get-users repository)
-      (db/get-users))
-    (catch Exception e
-      (log :warn (str "There was an exception trying to query the database. Exception " e)))))
-
+  ([]
+   (try
+     (let [get-value (comp val first)]
+       (map get-value (db/get-users)))
+     (catch Exception e
+       (log :warn (str "There was an exception in get-users. Exception " e))
+       (throw e))))
+  ([repository]
+    (try
+      (let [get-value (comp val first)]
+        (map get-value (db/get-users repository)))
+     (catch Exception e
+       (log :warn (str "There was an exception in get-users. Exception " e))
+       (throw e)))))
 
 (defn get-user-score
-  [user repository]
-  (try
-    (if  (and (not (nil? repository)) (not (str/blank? repository)))
-      (db/get-user-score user repository)
-      (db/get-user-score user))
-    (catch Exception e
-      (log :warn (str "There was an exception trying to query the database. Exception " e)))))
+  ([user]
+   (try
+     (let [get-value (comp val first first)] 
+       (get-value (db/get-user-score user)))
+     (catch Exception e
+       (log :warn (str "There was an exception in get-user-score. Exception " e))
+       (throw e))))
+  ([user repository]
+   (try
+     (let [get-value (comp val first first)]
+       (get-value (db/get-user-score user repository)))
+     (catch Exception e
+       (log :warn (str "There was an exception in get-user-score. Exception " e))
+       (throw e)))))
