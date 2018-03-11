@@ -24,11 +24,9 @@
         github-user (get-in body ["sender" "login"])
         repository (get-in body ["repository" "full_name"])
         event-value (get-event-point-value event-type)]
-    (try
-      (let [db-response 
-            (db/persist-event! guid event-type event-value github-user repository)]
-        (println db-response)
-        true)
+    (try 
+      (db/persist-event! guid event-type event-value github-user repository)
+      true
       (catch Exception e
-        (log :error (str "Error saving event in the databae. Exception: " (.getMessage e)))
+        (log :error (str "Error saving event in the database. Exception: " (.getMessage e)))
         false))))

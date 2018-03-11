@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.20)
 # Database: github_scoring_service
-# Generation Time: 2018-03-10 19:22:10 +0000
+# Generation Time: 2018-03-11 03:51:57 +0000
 # ************************************************************
 
 
@@ -28,10 +28,10 @@ DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events` (
   `id` varchar(50) NOT NULL DEFAULT '',
   `type` varchar(35) DEFAULT NULL,
+  `point_value` tinyint(4) DEFAULT NULL,
   `sender` varchar(250) DEFAULT NULL,
   `repository` varchar(250) DEFAULT NULL,
-  `organization` varchar(250) DEFAULT NULL,
-  `time_stamp` timestamp NULL DEFAULT NULL,
+  `time_stamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

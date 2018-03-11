@@ -19,4 +19,4 @@
   [id type point_value sender repository]
   (sql/insert! db
                :events
-               (struct events-row id type point_value repository)))
+               (struct events-row id type point_value sender repository)))
