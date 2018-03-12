@@ -19,3 +19,9 @@
    (str "SELECT SUM(point_value) FROM events WHERE sender=\"" user "\""))
   ([user repository]
    (str "SELECT SUM(point_value) FROM events WHERE sender=\"" user "\" AND repository=\"" repository "\"")))
+
+(defn get-user-history-query
+  ([user]
+   (str "SELECT type, point_value, repository, time_stamp FROM events WHERE sender=\"" user "\""))
+  ([user repository]
+   (str "SELECT type, point_value, repository, time_stamp FROM events WHERE sender=\"" user "\" AND repository=\"" repository "\"")))

@@ -34,3 +34,17 @@
      (catch Exception e
        (log :warn (str "There was an exception in get-user-score. Exception " e))
        (throw e)))))
+
+(defn get-user-history
+  ([user]
+   (try
+     (seq (db/get-user-history user))
+     (catch Exception e
+       (log :warn (str "There was an exception in get-user-history. Exception " e))
+       (throw e))))
+  ([user repository]
+   (try
+     (seq (db/get-user-history user repository))
+     (catch Exception e
+       (log :warn (str "There was an exception in get-user-history. Exception " e))
+       (throw e)))))

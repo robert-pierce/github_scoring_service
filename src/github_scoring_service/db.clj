@@ -40,3 +40,8 @@
   ([user repository]
    (sql/query db [(query/get-user-score-query user repository)])))
 
+(defn get-user-history
+  ([user]
+   (sql/query db [(query/get-user-history-query user)]))
+  ([user repository]
+   (sql/query db [(query/get-user-history-query user repository)])))
