@@ -4,10 +4,10 @@
             [github-scoring-service.config :as c]
             [github-scoring-service.db :as db]))
 
-(def value-map {"push" 5 
-                "pull_request_review_comment" 4 
-                "watch" 3 
-                "create" 2})
+(def value-map {"push"  (:push-event-value c/config) 
+                "pull_request_review_comment"  (:pr-comment-value c/config) 
+                "watch" (:watch-event-value c/config) 
+                "create" (:create-event-value c/config)})
 
 (defn get-event-point-value
   [event-type]
