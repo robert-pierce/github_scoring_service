@@ -7,7 +7,11 @@
 (defn dev-env-info
   []
   (log :info (str "Database Username: " (:db-username c/config)))
-  (log :info (str "Database Url: " (:db-url c/config))))
+  (log :info (str "Database Url: " (:db-url c/config)))
+  (log :info (str "The Push Event Value is " (:push-event-value c/config)))
+  (log :info (str "The PR Comment Value is " (:pr-comment-value c/config)))
+  (log :info (str "The Watch Event Value is " (:watch-event-value c/config)))
+  (log :info (str "The Create Event Value is " (:create-event-value c/config))))
 
 (defn check-db
   []
