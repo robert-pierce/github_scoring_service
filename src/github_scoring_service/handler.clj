@@ -13,22 +13,34 @@
 (defn get-users-handler
   [repository]
   (if (and (not (nil? repository)) (not (str/blank? repository)))
-    (if-let [users (users/get-users repository)]
-      {:status 200 :body {:repository repository :users users}}
-      {:status 200 :body {:repository repository :message "No Results"}})
-    (if-let [users (users/get-users)]
-      {:status 200 :body {:users users}}
-      {:status 200 :body {:message "No Results"}})))
+    (try 
+      (if-let [users (users/get-users repository)]
+        {:status 200 :body {:repository repository :users users}}
+        {:status 200 :body {:repository repository :message "No Results"}})
+      (catch Exception e
+        {:statis 500 :body "There was a server error"}))
+    (try
+      (if-let [users (users/get-users)]
+        {:status 200 :body {:users users}}
+        {:status 200 :body {:message "No Results"}})
+      (catch Exception e
+        {:status 500 :body "There was a server error"}))))
 
 (defn get-repositories-handler
   [user]
   (if (and (not (nil? user)) (not (str/blank? user)))
-    (if-let [repos (repos/get-repositories user)]
-      {:status 200 :body {:user user :repositories repos}}
-      {:status 200 :body {:user user :message "No Results"}})
-    (if-let [repos (repos/get-repositories)]
-      {:status 200 :body {:repositories repos}}
-      {:status 200 :body {:message "No Results"}})))
+    (try
+      (if-let [repos (repos/get-repositories user)]
+        {:status 200 :body {:user user :repositories repos}}
+        {:status 200 :body {:user user :message "No Results"}})
+      (catch Exception e
+        {:status 500 :body "There was a server error"}))
+    (try 
+      (if-let [repos (repos/get-repositories)]
+        {:status 200 :body {:repositories repos}}
+        {:status 200 :body {:message "No Results"}})
+      (catch Exception e 
+        {:status 500 :body "There was a server error"}))))
 
 (defn get-user-score-handler
   [user repository]
@@ -38,13 +50,13 @@
         {:status 200 :body {:user user :repository repository :score score}}
         {:status 200 :body {:user user :repository repository :message "No Results For This User and Repository"}})
       (catch Exception e
-        {:status 500 :body (str "There was a server error")}))
+        {:status 500 :body "There was a server error"}))
     (try
       (if-let [score (users/get-user-score user)]
         {:status 200 :body {:user user :score score}}
         {:status 200 :body {:user user :message "No Results For This User"}})
       (catch Exception e
-        {:status 500 :body (str "There was a server error")}))))
+        {:status 500 :body "There was a server error"}))))
 
 (defn get-user-history-handler
   [user repository]
@@ -56,7 +68,7 @@
           {:status 200 :body {:user user :history history :message "Could Not Get User Score"}})
         {:status 200 :body {:user user :repository repository :message "No History For This User and Repository"}})
       (catch Exception e
-        {:status 500 :body (str "There was a server error")}))
+        {:status 500 :body "There was a server error"}))
     (try
       (if-let [history (users/get-user-history user)]
         (if-let [score (users/get-user-score user)] 
@@ -64,7 +76,7 @@
           {:status 200 :body {:user user :history history :message "Could Not Get User Score"}})
         {:status 200 :body {:user user :message "No History For This User"}})
       (catch Exception e
-        {:status 500 :body (str "There was a server error")}))))
+        {:status 500 :body "There was a server error"}))))
 
 (defn get-leaderboard-handler
   [repository]
@@ -74,25 +86,24 @@
         {:status 200 :body {:repository repository :leaderboard leaderboard}}
         {:status 200 :body {:repository repository :message "No Leaderboard Results For This Repository"}})
       (catch Exception e
-        {:status 500 :body (str "There was a server error")}))
+        {:status 500 :body "There was a server error"}))
     (try
       (if-let [leaderboard (leaderboard/get-leaderboard)]
         {:status 200 :body {:leaderboard leaderboard}}
         {:status 200 :body {:message "No Leaderboard Results"}})
       (catch Exception e
-        {:status 500 :body (str "There was a server error")}))))
+        {:status 500 :body "There was a server error"}))))
 
 
 (defn process-event-handler
   [request]
-  (if-let [process-status (event/process-event request)]
-    {:status 200}
-    {:status 500}))
+  (event/process-event request)
+  {:status 200})
 
 (defn health-check
   "A health check endpoint that will also print the git hash"
   []
-  {:status 200 :body (str "I'm Alive")})
+  {:status 200 :body "I'm Alive"})
 
 (defroutes app-routes
   (GET "/api/users" [repository] (get-users-handler repository))
