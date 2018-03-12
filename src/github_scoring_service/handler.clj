@@ -5,6 +5,7 @@
             [github-scoring-service.event_processor :as event]
             [github-scoring-service.users :as users]
             [github-scoring-service.repositories :as repos]
+            [github-scoring-service.leaderboard :as leaderboard]
             [github-scoring-service.db :as db]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.json :as middleware]))
@@ -14,7 +15,7 @@
   (if (and (not (nil? repository)) (not (str/blank? repository)))
     (if-let [users (users/get-users repository)]
       {:status 200 :body {:repository repository :users users}}
-      {:status 200 :body {:message "No Results"}})
+      {:status 200 :body {:repository repository :message "No Results"}})
     (if-let [users (users/get-users)]
       {:status 200 :body {:users users}}
       {:status 200 :body {:message "No Results"}})))
@@ -24,7 +25,7 @@
   (if (and (not (nil? user)) (not (str/blank? user)))
     (if-let [repos (repos/get-repositories user)]
       {:status 200 :body {:user user :repositories repos}}
-      {:status 200 :body {:message "No Results"}})
+      {:status 200 :body {:user user :message "No Results"}})
     (if-let [repos (repos/get-repositories)]
       {:status 200 :body {:repositories repos}}
       {:status 200 :body {:message "No Results"}})))
@@ -65,6 +66,21 @@
       (catch Exception e
         {:status 500 :body (str "There was a server error")}))))
 
+(defn get-leaderboard-handler
+  [repository]
+  (if (and (not (nil? repository)) (not (str/blank? repository)))
+    (try
+      (if-let [leaderboard (leaderboard/get-leaderboard repository)]
+        {:status 200 :body {:repository repository :leaderboard leaderboard}}
+        {:status 200 :body {:repository repository :message "No Leaderboard Results For This Repository"}})
+      (catch Exception e
+        {:status 500 :body (str "There was a server error")}))
+    (try
+      (if-let [leaderboard (leaderboard/get-leaderboard)]
+        {:status 200 :body {:leaderboard leaderboard}}
+        {:status 200 :body {:message "No Leaderboard Results"}})
+      (catch Exception e
+        {:status 500 :body (str "There was a server error")}))))
 
 
 (defn process-event-handler
@@ -82,6 +98,7 @@
   (GET "/api/users" [repository] (get-users-handler repository))
   (GET "/api/users/:user/score" [user repository] (get-user-score-handler user repository))
   (GET "/api/users/:user/history" [user repository] (get-user-history-handler user repository))
+  (GET "/api/leaderboard" [repository] (get-leaderboard-handler repository))
   (GET "/api/repositories" [user] (get-repositories-handler user))
   (POST "/event" request (process-event-handler  request))
   (ANY "/health_check" [] (health-check))

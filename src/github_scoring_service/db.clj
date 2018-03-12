@@ -45,3 +45,9 @@
    (sql/query db [(query/get-user-history-query user)]))
   ([user repository]
    (sql/query db [(query/get-user-history-query user repository)])))
+
+(defn get-leaderboard
+  ([]
+   (sql/query db [(query/get-leaderboard-query)]))
+  ([repository]
+   (sql/query db [(query/get-leaderboard-query repository)])))

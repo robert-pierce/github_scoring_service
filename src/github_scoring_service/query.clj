@@ -25,3 +25,9 @@
    (str "SELECT type, point_value, repository, time_stamp FROM events WHERE sender=\"" user "\""))
   ([user repository]
    (str "SELECT type, point_value, repository, time_stamp FROM events WHERE sender=\"" user "\" AND repository=\"" repository "\"")))
+
+(defn get-leaderboard-query
+  ([]
+   (str "SELECT sender as user, SUM(point_value) as points FROM events GROUP BY sender ORDER BY points DESC"))
+  ([repository]
+   (str "SELECT sender as user, SUM(point_value) as points FROM events WHERE repository=\"" repository "\" GROUP BY sender ORDER BY points DESC")))
