@@ -2,20 +2,17 @@
   (:require [clojure.test :refer :all]
             [github-scoring-service.query :as query]))
 
-
 (deftest get-user-query-test
   (testing "It correctly handles no params"
     (is (= "SELECT DISTINCT sender FROM events" (query/get-users-query))))
   (testing "It correctly handles one param"
     (is (= "SELECT DISTINCT sender FROM events WHERE repository=\"some-repository\"" (query/get-users-query "some-repository")))))
 
-
 (deftest get-repositories-query-test
   (testing "It correctly handles no params"
     (is (= "SELECT DISTINCT repository FROM events" (query/get-repositories-query))))
   (testing "It correctly handles one param"
     (is (= "SELECT DISTINCT repository FROM events WHERE sender=\"some-user\"" (query/get-repositories-query "some-user")))))
-
 
 (deftest get-user-score-query-test
   (testing "It correctly handles one param"
