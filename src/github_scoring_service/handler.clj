@@ -65,7 +65,7 @@
       (if-let [history (users/get-user-history user repository)]
         (if-let [score (users/get-user-score user repository)]
           {:status 200 :body {:user user :repository repository :score score :history history}}
-          {:status 200 :body {:user user :history history :message "Could Not Get User History"}})
+          {:status 200 :body {:user user :history history :message "Could Not Get User Score"}})
         {:status 200 :body {:user user :repository repository :message "No History For This User And Repository"}})
       (catch Exception e
         {:status 500 :body "There was a server error"}))
@@ -73,7 +73,7 @@
       (if-let [history (users/get-user-history user)]
         (if-let [score (users/get-user-score user)] 
           {:status 200 :body {:user user :score score :history history}}
-          {:status 200 :body {:user user :history history :message "Could Not Get User History"}})
+          {:status 200 :body {:user user :history history :message "Could Not Get User Score"}})
         {:status 200 :body {:user user :message "No History For This User"}})
       (catch Exception e
         {:status 500 :body "There was a server error"}))))
@@ -93,7 +93,6 @@
         {:status 200 :body {:message "No Leaderboard Results"}})
       (catch Exception e
         {:status 500 :body "There was a server error"}))))
-
 
 (defn process-event-handler
   [request]

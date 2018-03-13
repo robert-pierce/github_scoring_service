@@ -116,12 +116,90 @@
         (is (= (parse-string (:body response)) {"user" "some-user" "repository" "some-repository" "message" "Could Not Get Score For This User And Repository"})))))
   (testing "It correctly handles a 'get-user-score' request with a filter param and a thrown exception"
     (with-redefs [users/get-user-score (fn [& args] (if (= (count args) 2) (throw (Exception. "some-exception")) "some-incorrect-arg-count"))]
-      (let [response (app-handler (mock/request :get "/api/users" {"repository" "some-repository"}))]
+      (let [response (app-handler (mock/request :get "/api/users/some-user/score" {"repository" "some-repository"}))]
         (is (= (:status response) 500))
         (is (= (:body response) "There was a server error"))))))
 
+(deftest api-get-user-history-route-test
+  (testing "It correctly handles a 'get-user-history' request with no filter param"
+    (with-redefs [users/get-user-history (fn [& args] (if (= (count args) 1) "some-history" "some-incorrect-arg-count"))
+                  users/get-user-score (fn [& args] "42")]
+      (let [response (app-handler (mock/request :get "/api/users/some-user/history"))]
+        (is (= (:status response) 200))
+        (is (= (parse-string (:body response)) {"user" "some-user" "score" "42" "history" "some-history"})))))
+  (testing "It correctly handles a 'get-user-history' request with empty string filter param"
+    (with-redefs [users/get-user-history (fn [& args] (if (= (count args) 1) "some-history" "some-incorrect-arg-count"))
+                  users/get-user-score (fn [& args] "42")]
+      (let [response (app-handler (mock/request :get "/api/users/some-user/history" {"repository" ""}))]
+        (is (= (:status response) 200))
+        (is (= (parse-string (:body response)) {"user" "some-user" "score" "42" "history" "some-history"})))))
+  (testing "It correctly handles a 'get-user-history' request with no filter param and no results"
+    (with-redefs [users/get-user-history (fn [& args] (if (= (count args) 1) nil "some-incorrect-arg-count"))
+                  users/get-user-score (fn [& args] "42")]
+      (let [response (app-handler (mock/request :get "/api/users/some-user/history"))]
+        (is (= (:status response) 200))
+        (is (= (parse-string (:body response)) {"user" "some-user" "message" "No History For This User"})))))
+  (testing "It correctly handles a 'get-user-score' request with no filter param and a thrown exception"
+    (with-redefs [users/get-user-history (fn [& args] (if (= (count args) 1) (throw (Exception. "some-exception")) "some-incorrect-arg-count"))
+                  users/get-user-score (fn [& args] "42")]
+      (let [response (app-handler (mock/request :get "/api/users/some-user/history"))]
+        (is (= (:status response) 500))
+        (is (= (:body response) "There was a server error")))))
+  (testing "It correctly handles a 'get-user-score' request with a filter param"
+    (with-redefs [users/get-user-history (fn [& args] (if (= (count args) 2) "some-history" "some-incorrect-arg-count"))
+                  users/get-user-score (fn [& args] "42")]
+      (let [response (app-handler (mock/request :get "/api/users/some-user/history" {"repository" "some-repository"}))]
+        (is (= (:status response) 200))
+        (is (= (parse-string (:body response)) {"user" "some-user" "repository" "some-repository" "score" "42" "history" "some-history"})))))
+  (testing "It correctly handles a 'get-user-score' request with a filter param and no results"
+    (with-redefs [users/get-user-history (fn [& args] (if (= (count args) 2) nil "some-incorrect-arg-count"))
+                  users/get-user-score (fn [& args] "42")]
+      (let [response (app-handler (mock/request :get "/api/users/some-user/history" {"repository" "some-repository"}))]
+        (is (= (:status response) 200))
+        (is (= (parse-string (:body response)) {"user" "some-user" "repository" "some-repository" "message" "No History For This User And Repository"})))))
+  (testing "It correctly handles a 'get-user-score' request with a filter param and a thrown exception"
+    (with-redefs [users/get-user-history (fn [& args] (if (= (count args) 2) (throw (Exception. "some-exception")) "some-incorrect-arg-count"))
+                  users/get-user-score (fn [& args] "42")]
+      (let [response (app-handler (mock/request :get "/api/users/some-user/history" {"repository" "some-repository"}))]
+        (is (= (:status response) 500))
+        (is (= (:body response) "There was a server error"))))))
 
-
+(deftest api-get-leaderboard-route-test
+  (testing "It correctly handles a 'get-leaderboard' request with no filter param"
+    (with-redefs [leaderboard/get-leaderboard (fn [& args] (if (= (count args) 0) "some-leaderboard" "some-incorrect-arg-count"))]
+      (let [response (app-handler (mock/request :get "/api/leaderboard"))]
+        (is (= (:status response) 200))
+        (is (= (parse-string (:body response)) {"leaderboard" "some-leaderboard"})))))
+  (testing "It correctly handles a 'get-leaderboard' request with empty string filter param"
+    (with-redefs [leaderboard/get-leaderboard (fn [& args] (if (= (count args) 0) "some-leaderboard" "some-incorrect-arg-count"))]
+      (let [response (app-handler (mock/request :get "/api/leaderboard" {"repository" ""}))]
+        (is (= (:status response) 200))
+        (is (= (parse-string (:body response)) {"leaderboard" "some-leaderboard"})))))
+  (testing "It correctly handles a 'get-users' request with no filter param and no results"
+    (with-redefs [leaderboard/get-leaderboard (fn [& args] (if (= (count args) 0) nil "some-incorrect-arg-count"))]
+      (let [response (app-handler (mock/request :get "/api/leaderboard"))]
+        (is (= (:status response) 200))
+        (is (= (parse-string (:body response)) {"message" "No Leaderboard Results"})))))
+  (testing "It correctly handles a 'get-users' request with no filter param and a thrown exception"
+    (with-redefs [leaderboard/get-leaderboard (fn [& args] (if (= (count args) 0) (throw (Exception. "some-exception")) "some-incorrect-arg-count"))]
+      (let [response (app-handler (mock/request :get "/api/leaderboard"))]
+        (is (= (:status response) 500))
+        (is (= (:body response) "There was a server error")))))
+  (testing "It correctly handles a 'get-leadergoard' request with a filter param"
+    (with-redefs [leaderboard/get-leaderboard (fn [& args] (if (= (count args) 1) "some-leaderboard" "some-incorrect-arg-count"))]
+      (let [response (app-handler (mock/request :get "/api/leaderboard" {"repository" "some-repository"}))]
+        (is (= (:status response) 200))
+        (is (= (parse-string (:body response)) {"repository" "some-repository" "leaderboard" "some-leaderboard"})))))
+  (testing "It correctly handles a 'get-users' request with a filter param and no results"
+    (with-redefs [leaderboard/get-leaderboard (fn [& args] (if (= (count args) 1) nil "some-incorrect-arg-count"))]
+      (let [response (app-handler (mock/request :get "/api/leaderboard" {"repository" "some-repository"}))]
+        (is (= (:status response) 200))
+        (is (= (parse-string (:body response)) {"repository" "some-repository" "message" "No Leaderboard Results For This Repository"})))))
+  (testing "It correctly handles a 'get-users' request with a filter param and a thrown exception"
+    (with-redefs [leaderboard/get-leaderboard (fn [& args] (if (= (count args) 1) (throw (Exception. "some-exception")) "some-incorrect-arg-count"))]
+      (let [response (app-handler (mock/request :get "/api/leaderboard" {"repository" "some-repository"}))]
+        (is (= (:status response) 500))
+        (is (= (:body response) "There was a server error"))))))
 
 (deftest health-check-route-test
   (testing "It correctly handles a health-check request"
