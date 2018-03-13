@@ -4,6 +4,8 @@
             [github-scoring-service.db :as db]))
 
 (defn get-repositories
+  "Queries the database to get a list of repositories. If passed a string
+  parameter it will filter on the user that matches that parameter."
   ([]
    (try
      (let [get-value (comp val first)]

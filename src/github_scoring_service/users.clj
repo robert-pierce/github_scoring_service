@@ -4,6 +4,8 @@
             [github-scoring-service.db :as db]))
 
 (defn get-users
+  "Queries the database to get a list of users. If passed a string
+  parameter it will filter on the repository that matches that parameter."
   ([]
    (try
      (let [get-value (comp val first)]
@@ -20,6 +22,8 @@
        (throw e)))))
 
 (defn get-user-score
+  "Queries the database to get a user's score. If passed a second string
+  parameter it will filter on the repository that matches that parameter."
   ([user]
    (try
      (let [get-value (comp val first first)] 
@@ -36,6 +40,8 @@
        (throw e)))))
 
 (defn get-user-history
+  "Queries the database to get a user's history. If passed a second string
+  parameter it will filter on the repository that matches that parameter."
   ([user]
    (try
      (seq (db/get-user-history user))

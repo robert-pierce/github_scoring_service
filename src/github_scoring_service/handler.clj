@@ -11,6 +11,7 @@
             [ring.middleware.json :as middleware]))
 
 (defn get-users-handler
+  "Handles a get-users request"
   [repository]
   (if (and (not (nil? repository)) (not (str/blank? repository)))
     (try 
@@ -27,6 +28,7 @@
         {:status 500 :body "There was a server error"}))))
 
 (defn get-repositories-handler
+  "Handlers a get-repositories request"
   [user]
   (if (and (not (nil? user)) (not (str/blank? user)))
     (try
@@ -43,6 +45,7 @@
         {:status 500 :body "There was a server error"}))))
 
 (defn get-user-score-handler
+  "Handlers a get-user-score request"
   [user repository]
   (if (and (not (nil? repository)) (not (str/blank? repository)))
     (try
@@ -59,6 +62,7 @@
         {:status 500 :body "There was a server error"}))))
 
 (defn get-user-history-handler
+  "Handlers a get-user-history request"
   [user repository]
   (if (and (not (nil? repository)) (not (str/blank? repository)))
     (try
@@ -79,6 +83,7 @@
         {:status 500 :body "There was a server error"}))))
 
 (defn get-leaderboard-handler
+  "Handles a get-leaderboard request"
   [repository]
   (if (and (not (nil? repository)) (not (str/blank? repository)))
     (try
@@ -95,6 +100,7 @@
         {:status 500 :body "There was a server error"}))))
 
 (defn process-event-handler
+  "Handlers a process-event request"
   [request]
   (event/process-event request)
   {:status 200})

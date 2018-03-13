@@ -21,6 +21,8 @@
      (log :warn (str "Not able to connect to database. Exception:  " (.getMessage e))))))
 
 (defn init-app
+  "Any functions that you want to be called at app start up can go here. 
+  Useful for checking the state of the app at startup (i.e. database connection etc)"
   []
   (log :info "Initializing Github_Scoring_Service")
   (dev-env-info)
