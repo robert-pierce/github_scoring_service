@@ -4,7 +4,7 @@
             [github-scoring-service.config :as c]
             [github-scoring-service.db :as db]))
 
-(def value-map {"push" (Integer/parseInt (:push-event-value c/config)) 
+(def value-map  {"push" (Integer/parseInt (:push-event-value c/config)) 
                 "pull_request_review_comment" (Integer/parseInt (:pr-comment-value c/config)) 
                 "watch" (Integer/parseInt (:watch-event-value c/config)) 
                 "create" (Integer/parseInt (:create-event-value c/config))})
@@ -26,7 +26,5 @@
         event-value (get-event-point-value event-type)]
     (try 
       (db/persist-event! guid event-type event-value github-user repository)
-      true
       (catch Exception e
-        (log :error (str "Error saving event in the database. Exception: " (.getMessage e)))
-        false))))
+        (log :error (str "Error saving event in the database. Exception: " (.getMessage e)))))))
