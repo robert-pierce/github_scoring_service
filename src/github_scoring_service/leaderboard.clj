@@ -4,6 +4,8 @@
             [github-scoring-service.db :as db]))
 
 (defn get-leaderboard
+  "Queries the database to get the leaderboard. If passed a string
+  parameter it will filter on the repository that matches that parameter."
   ([]
    (try
      (seq (db/get-leaderboard))

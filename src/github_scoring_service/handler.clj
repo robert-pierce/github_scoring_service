@@ -11,6 +11,7 @@
             [ring.middleware.json :as middleware]))
 
 (defn get-users-handler
+  "Handles a get-users request"
   [repository]
   (if (and (not (nil? repository)) (not (str/blank? repository)))
     (try 
@@ -18,7 +19,7 @@
         {:status 200 :body {:repository repository :users users}}
         {:status 200 :body {:repository repository :message "No Results"}})
       (catch Exception e
-        {:statis 500 :body "There was a server error"}))
+        {:status 500 :body "There was a server error"}))
     (try
       (if-let [users (users/get-users)]
         {:status 200 :body {:users users}}
@@ -27,6 +28,7 @@
         {:status 500 :body "There was a server error"}))))
 
 (defn get-repositories-handler
+  "Handlers a get-repositories request"
   [user]
   (if (and (not (nil? user)) (not (str/blank? user)))
     (try
@@ -43,22 +45,24 @@
         {:status 500 :body "There was a server error"}))))
 
 (defn get-user-score-handler
+  "Handlers a get-user-score request"
   [user repository]
   (if (and (not (nil? repository)) (not (str/blank? repository)))
     (try
       (if-let [score (users/get-user-score user repository)]
         {:status 200 :body {:user user :repository repository :score score}}
-        {:status 200 :body {:user user :repository repository :message "No Results For This User and Repository"}})
+        {:status 200 :body {:user user :repository repository :message "Could Not Get Score For This User And Repository"}})
       (catch Exception e
         {:status 500 :body "There was a server error"}))
     (try
       (if-let [score (users/get-user-score user)]
         {:status 200 :body {:user user :score score}}
-        {:status 200 :body {:user user :message "No Results For This User"}})
+        {:status 200 :body {:user user :message "Could Not Get Score For This User"}})
       (catch Exception e
         {:status 500 :body "There was a server error"}))))
 
 (defn get-user-history-handler
+  "Handlers a get-user-history request"
   [user repository]
   (if (and (not (nil? repository)) (not (str/blank? repository)))
     (try
@@ -66,7 +70,7 @@
         (if-let [score (users/get-user-score user repository)]
           {:status 200 :body {:user user :repository repository :score score :history history}}
           {:status 200 :body {:user user :history history :message "Could Not Get User Score"}})
-        {:status 200 :body {:user user :repository repository :message "No History For This User and Repository"}})
+        {:status 200 :body {:user user :repository repository :message "No History For This User And Repository"}})
       (catch Exception e
         {:status 500 :body "There was a server error"}))
     (try
@@ -79,6 +83,7 @@
         {:status 500 :body "There was a server error"}))))
 
 (defn get-leaderboard-handler
+  "Handles a get-leaderboard request"
   [repository]
   (if (and (not (nil? repository)) (not (str/blank? repository)))
     (try
@@ -94,8 +99,8 @@
       (catch Exception e
         {:status 500 :body "There was a server error"}))))
 
-
 (defn process-event-handler
+  "Handlers a process-event request"
   [request]
   (event/process-event request)
   {:status 200})

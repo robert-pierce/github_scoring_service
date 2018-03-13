@@ -9,6 +9,7 @@
                  [ring/ring-defaults "0.2.1"]
                  [org.clojure/java.jdbc "0.7.5"]
                  [mysql/mysql-connector-java "5.1.6"]
+                 [cheshire "5.8.0"]
                  [environ "1.0.2"]]
   :plugins [[lein-ring "0.9.7"]
             [lein-environ "1.0.2"]]

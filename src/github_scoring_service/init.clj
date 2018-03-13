@@ -1,6 +1,5 @@
 (ns github-scoring-service.init
-  (:require [clojure.string :as string]
-            [clj-log.core :refer :all]
+  (:require [clj-log.core :refer :all]
             [github-scoring-service.db :as db]
             [github-scoring-service.config :as c]))
 
@@ -22,6 +21,8 @@
      (log :warn (str "Not able to connect to database. Exception:  " (.getMessage e))))))
 
 (defn init-app
+  "Any functions that you want to be called at app start up can go here. 
+  Useful for checking the state of the app at startup (i.e. database connection etc)"
   []
   (log :info "Initializing Github_Scoring_Service")
   (dev-env-info)
