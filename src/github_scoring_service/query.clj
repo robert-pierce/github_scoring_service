@@ -1,7 +1,6 @@
 (ns github-scoring-service.query
   (:require [clojure.string :as str]))
 
-
 (defn get-users-query
   ([]
    (str "SELECT DISTINCT sender FROM events"))

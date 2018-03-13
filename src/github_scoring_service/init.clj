@@ -1,6 +1,5 @@
 (ns github-scoring-service.init
-  (:require [clojure.string :as string]
-            [clj-log.core :refer :all]
+  (:require [clj-log.core :refer :all]
             [github-scoring-service.db :as db]
             [github-scoring-service.config :as c]))
 
