@@ -18,7 +18,7 @@
         {:status 200 :body {:repository repository :users users}}
         {:status 200 :body {:repository repository :message "No Results"}})
       (catch Exception e
-        {:statis 500 :body "There was a server error"}))
+        {:status 500 :body "There was a server error"}))
     (try
       (if-let [users (users/get-users)]
         {:status 200 :body {:users users}}
@@ -48,13 +48,13 @@
     (try
       (if-let [score (users/get-user-score user repository)]
         {:status 200 :body {:user user :repository repository :score score}}
-        {:status 200 :body {:user user :repository repository :message "No Results For This User and Repository"}})
+        {:status 200 :body {:user user :repository repository :message "Could Not Get Score For This User And Repository"}})
       (catch Exception e
         {:status 500 :body "There was a server error"}))
     (try
       (if-let [score (users/get-user-score user)]
         {:status 200 :body {:user user :score score}}
-        {:status 200 :body {:user user :message "No Results For This User"}})
+        {:status 200 :body {:user user :message "Could Not Get Score For This User"}})
       (catch Exception e
         {:status 500 :body "There was a server error"}))))
 
@@ -65,15 +65,15 @@
       (if-let [history (users/get-user-history user repository)]
         (if-let [score (users/get-user-score user repository)]
           {:status 200 :body {:user user :repository repository :score score :history history}}
-          {:status 200 :body {:user user :history history :message "Could Not Get User Score"}})
-        {:status 200 :body {:user user :repository repository :message "No History For This User and Repository"}})
+          {:status 200 :body {:user user :history history :message "Could Not Get User History"}})
+        {:status 200 :body {:user user :repository repository :message "No History For This User And Repository"}})
       (catch Exception e
         {:status 500 :body "There was a server error"}))
     (try
       (if-let [history (users/get-user-history user)]
         (if-let [score (users/get-user-score user)] 
           {:status 200 :body {:user user :score score :history history}}
-          {:status 200 :body {:user user :history history :message "Could Not Get User Score"}})
+          {:status 200 :body {:user user :history history :message "Could Not Get User History"}})
         {:status 200 :body {:user user :message "No History For This User"}})
       (catch Exception e
         {:status 500 :body "There was a server error"}))))
