@@ -100,7 +100,7 @@
         {:status 500 :body "There was a server error"}))))
 
 (defn process-event-handler
-  "Handlers a process-event request"
+  "Handles a process-event request"
   [request]
   (event/process-event request)
   {:status 200})
@@ -116,7 +116,7 @@
   (GET "/api/users/:user/history" [user repository] (get-user-history-handler user repository))
   (GET "/api/leaderboard" [repository] (get-leaderboard-handler repository))
   (GET "/api/repositories" [user] (get-repositories-handler user))
-  (POST "/event" request (process-event-handler  request))
+  (POST "/event" request (process-event-handler request))
   (ANY "/health_check" [] (health-check))
   (route/not-found "Not Found"))
 

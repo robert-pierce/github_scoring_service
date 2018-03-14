@@ -8,11 +8,23 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
-    env_file: ./env/server.env
+    env_file: ./docker-env/scoring-service/server.env
     depends_on:
       database:
         condition: service_healthy
- 
+  
+  event-emitter:
+    build:
+      context: https://github.com/robert-pierce/github_mock_event_emitter.git
+    ports:
+      - "8010:8010"
+    env_file: ./docker-env/event-emitter/server.env
+    healthcheck:
+      test: curl 127.0.0.1:8010/health_check
+      timeout: 3s
+      interval: 3s
+      retries: 3
+
   database:
     image: mysql/mysql-server:5.7
     ports:
