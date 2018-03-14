@@ -153,7 +153,8 @@ You should also be able to connect to the database with the following:
     If you want to filter these results by repository then pass in a query param like so:
     
      > `/api/users?repository=<some-repo-name>`
-     
+
+***
 - **Get a list of distinct repositories**
 
     If you want a list of all distinct repositories that have had users trigger github webhooks that have been pushed to this  service then make a **GET** request to the following endpoint:
@@ -163,31 +164,34 @@ You should also be able to connect to the database with the following:
     If you want to filter these results by user then pass in a query param like so:
     
      > `/api/repositories?users=<some-user-name>`
-     
+   
+   ***
 - **Get a user's score**
 
     If you want to get a user's score then make a **GET** request to the following endpoint:
     
-    > `/api/users/:users/score`
+    > `/api/users/:user/score`
     
     where `:users` is a user name.
     
     If you want to filter these results by repository then pass in a query param like so:
     
-     > `/api/users/:users/score?repository=<some-repo-name>`    
+     > `/api/users/:user/score?repository=<some-repo-name>`    
      
+     ***
 - **Get a user's history**
 
     If you want to get a user's history then make a **GET** request to the following endpoint:
     
-    > `/api/users/:users/history`
+    > `/api/users/:user/history`
     
     where `:users` is a user name.
     
     If you want to filter these results by repository then pass in a query param like so:
     
-     > `/api/users/:users/history?repository=<some-repo-name>`    
+     > `/api/users/:user/history?repository=<some-repo-name>`    
 
+***
 - **Get the leaderboard**
 
     If you want to get a list of users ranked from highest score to lowest score then make a **GET** request to the following endpoint:
@@ -197,7 +201,8 @@ You should also be able to connect to the database with the following:
     If you want to filter these results by repository then pass in a query param like so:
     
      > `/api/leaderboard?repository=<some-repo-name>`  
-     
+  
+  ***
 - **Health Check**
 
     If you want to query the app for a health check then make a **GET** request to the following endpoint:
