@@ -1,8 +1,12 @@
 # github_scoring_service
 
-The github_scoring_service is a service that will keep track of github activity and will assign a score to users of that repo based off the different events they trigger from their activity. Users can then query the github_scoring_service for information about the scores of certain users. See the API section below for a detailed overview of the API. 
+The github_scoring_service is a service that will keep track of github activity and will assign a score to users of that repo based off the different events they trigger from their activity. 
 
-At its heart, the github_scoring_service is a simple HTTP server that listens for events pushed by a Github webhook. The service will assign a point value to certain github events and then save specific event information to a datastore.
+At its heart, the github_scoring_service is a simple HTTP server that listens for events pushed by a Github webhook. Once received, an event is persisted in the database. 
+
+Users can then query the github_scoring_service for information about the scores of certain users. 
+
+See the API section below for a detailed overview of the API. 
 
 ***
 ## Running
@@ -17,9 +21,23 @@ The easiest way to run the application is by using docker-compose. If you don't 
 **The github_scoring_service** has three parts
 1. The scoring service (this repo)
 2. A MySql database 
-3. [A mock event emitter](https://github.com/robert-pierce/github_mock_event_emitter)
+3. [A mock event emitter](https://github.com/robert-pierce/github_mock_event_emitter) Which will push simulated events to the scoring service.
 
+In order to locally start all three parts in conjunction follow these steps:
 
+1. Clone this repo
+2. On your local machine make sure all docker-containers running on ports 8000, 8010, and 3306 are stopped.
+3. In the project root directory run one of the following commands:
+
+`docker-compose up` if you want the service to start in the foreground 
+
+(usefull for inspecting logs as the app is running)
+
+or 
+
+`docker-compose up -d` if you want the service to start in the background.
+
+The app should then take a couple minutes to download all the source code, compile it, and run it. This delay should be much shorter 
 
 
 
