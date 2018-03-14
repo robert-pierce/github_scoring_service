@@ -48,24 +48,49 @@ If successful, after docker finishes building all of the containers and invoking
 `docker-compose ps`
 
 
+| Name                                 | Command                     | State | Ports                              | 
+| ------------------------------------ |:---------------------------:| -----:| -----------------------------------
+| githubscoringservice_database_1      |  /entrypoint.sh mysqld      | Up    | 0.0.0.0:3306->3306/tcp, 33060/tcp
+| githubscoringservice_event-emitter_1 | java -jar app-standalone.ja | Up    | 0.0.0.0:8010->8010/tcp
+| githubscoringservice_score-keeper_1  | java -jar app-standalone.ja | Up    | 0.0.0.0:8000->8000/tcp
 
 
-
-
-
+Notice the port mappings, we will be using these to call our service.
+***
 
 If you would like to compile this source code directly then you will need [Leiningen][] 2.0.0 or above installed.
 
 [leiningen]: https://github.com/technomancy/leiningen
 
-To start a web server for the application, run:
+To start a web server for the application run:
 
     lein ring server-headless
 
 The app should start up on port 8000
 
+***
 ### Environment
+Environment
 
+The service only needs a few environment variables in order to function:
+
+>`DB-USERNAME=test`
+
+>`DB-PASSWORD=test`
+
+>`DB-URL=database:3306/github_scoring_service`
+
+>`PUSH-EVENT-VALUE=5`
+
+>`PR-COMMENT-VALUE=4`
+
+>`WATCH-EVENT-VALUE=3`
+
+>`CREATE-EVENT-VALUE=2`
+
+However, if you start the app via docker-compose you don't need to worry about setting any environment variables. 
+
+If you would like to run the service independent of docker then you will need to set the variables in your profiles.clj.
 
 ***
 ## API
