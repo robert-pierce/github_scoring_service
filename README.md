@@ -1,10 +1,10 @@
-# github_scoring_service
+# Github Scoring Service
 
-The github_scoring_service is a service that will keep track of github activity and will assign a score to users of that repo based off the different events they trigger from their activity. 
+The Github Scoring Service is a service that will keep track of github activity and will assign a score to users of a repository based off of events triggered by a users activity. 
 
-At its heart, the github_scoring_service is a simple HTTP server that listens for events pushed by a Github webhook. Once received, an event is persisted in the database. 
+At its heart, the Github Scoring Service is a simple HTTP server that listens for events pushed by a github webhook. Once received, an event is persisted in a database. 
 
-Users can then query the github_scoring_service for information about the scores of certain users. 
+Users can then query the Github Scoring Service for information about the scores of certain users. 
 
 See the API section below for a detailed overview of the API. 
 
@@ -18,26 +18,36 @@ The easiest way to run the application is by using docker-compose. If you don't 
 [Install docker-compose](https://docs.docker.com/compose/install)
 
 
-**The github_scoring_service** has three parts
+**The Github Scoring Service** has three parts
 1. The scoring service (this repo)
 2. A MySql database 
-3. [A mock event emitter](https://github.com/robert-pierce/github_mock_event_emitter) Which will push simulated events to the scoring service.
+3. [A mock event emitter](https://github.com/robert-pierce/github_mock_event_emitter) which will push simulated events to the scoring service.
 
 In order to locally start all three parts in conjunction follow these steps:
 
-1. Clone this repo
+
+1. Clone this repository onto your local machine
 2. On your local machine make sure all docker-containers running on ports 8000, 8010, and 3306 are stopped.
 3. In the project root directory run one of the following commands:
 
-`docker-compose up` if you want the service to start in the foreground 
+`docker-compose up` 
 
+if you want the service to start in the foreground 
 (usefull for inspecting logs as the app is running)
 
 or 
 
-`docker-compose up -d` if you want the service to start in the background.
+`docker-compose up -d` 
 
-The app should then take a couple minutes to download all the source code, compile it, and run it. This delay should be much shorter 
+if you want the service to start in the background.
+
+The app should then take a couple of minutes to download all the source code, compile it, and run it. This delay will be much shorter on subsequent starts after the intial containers are built.
+
+If successful, after docker finishes building all of the containers and invoking them you should see three services up and running when you run the following command:
+
+`docker-compose ps`
+
+
 
 
 
@@ -52,7 +62,7 @@ To start a web server for the application, run:
 
     lein ring server-headless
 
-The app should start up on port 8010
+The app should start up on port 8000
 
 ### Environment
 
