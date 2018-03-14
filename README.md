@@ -9,7 +9,7 @@ Users can then query the Github Scoring Service for information about the scores
 See the API section below for a detailed overview of the API. 
 
 ***
-## Running
+## Running Locally
 
 The easiest way to run the application is by using docker-compose. If you don't have docker and docker-compose installed on your maching then you may want to consider doing so. Check out the following resources:
 
@@ -56,6 +56,18 @@ If successful, after docker finishes building all of the containers and invoking
 
 
 Notice the port mappings, we will be using these to call our service.
+
+***
+If you are running the application locally then you may want to send mock requests to the service in order to simulate a live github webhook. 
+
+>You can set a locally running instance of the app to accept live github webhooks. If you are interested in doing this then see the section below on setting up live github webhooks. 
+
+In order to send mock events you will need to check out the API for the [Github Mock Event Emitter](https://github.com/robert-pierce/github_mock_event_emitter).
+
+If you started the app with docker-compose then you should be able to reach the Github Mock Event Emitter by sending requests to 
+
+>`127.0.0.1:8010`
+
 ***
 
 If you would like to compile this source code directly then you will need [Leiningen][] 2.0.0 or above installed.
@@ -67,6 +79,19 @@ To start a web server for the application run:
     lein ring server-headless
 
 The app should start up on port 8000
+
+***
+### Setting Up Live Github Webhooks
+
+In order to run the app to accept live github webhooks then you need to deploy it in a way that it can receive POST requests from the internet. 
+
+You will also need to set a MySQL database up by setting the environment vairables (mentioned below) and deploying it somwhere that the scoring service can connect to it. 
+
+A fantastic way to do all this is with [Heroku](https://www.heroku.com)
+
+Once the app is properly deployed all you need to do is to go to the setting of a git repository and set up the webhook url (if you have permissions) to point to your deployed app. 
+
+Github will then send a POST request to your app to verify the webhook. If done correctly the app will verify the webhook (by responding with a 200), and the app will start recoding events.
 
 ***
 ### Environment
@@ -93,10 +118,32 @@ However, if you start the app via docker-compose you don't need to worry about s
 If you would like to run the service independent of docker then you will need to set the variables in your profiles.clj.
 
 ***
+### Making Requests
+If you start the app via docker-compose then you should be able to reach the Github Scoring service by sending requests to the following url
+
+>`127.0.0.1:8000`
+
+You should also be able to connect to the database with the following:
+
+>`Host:127.0.0.1`
+
+>`username:test`
+
+> `password:test`
+
+> `database: github_scoring_service`
+
+> `port:3306`
+
+
+***
 ## API
 
-1. **You can trigger individual events to be push to the github_scoring_service**
-  
+### Users
+
+- **Get a list of distinct users**
+    If you want a list of all distinct users that have triggered github webhooks that have been pushed to this service then 
+    
     To trigger individual events you need to send a **POST** request to the following endpoint:
      
      `/event`
