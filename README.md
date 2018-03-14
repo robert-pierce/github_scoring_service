@@ -1,10 +1,29 @@
 # github_scoring_service
 
-The github_scoring_service is a service that listens for events are sent by a Github webhook. The service will assign a point value based on certain github events, and save 
+The github_scoring_service is a service that will keep track of github activity and will assign a score to users of that repo based off the different events they trigger from their activity. Users can then query the github_scoring_service for information about the scores of certain users. See the API section below for a detailed overview of the API. 
+
+At its heart, the github_scoring_service is a simple HTTP server that listens for events pushed by a Github webhook. The service will assign a point value to certain github events and then save specific event information to a datastore.
 
 ***
 ## Running
-This service is intended to be run in conjunction with the [github-scoring-service](https://github.com/robert-pierce/github_scoring_service). See the documentation for the [github-scoring-service](https://github.com/robert-pierce/github_scoring_service) for more information on running the service in this fashion.
+
+The easiest way to run the application is by using docker-compose. If you don't have docker and docker-compose installed on your maching then you may want to consider doing so. Check out the following resources:
+
+[Install Docker](https://docs.docker.com/install)
+
+[Install docker-compose](https://docs.docker.com/compose/install)
+
+
+**The github_scoring_service** has three parts
+1. The scoring service (this repo)
+2. A MySql database 
+3. [A mock event emitter](https://github.com/robert-pierce/github_mock_event_emitter)
+
+
+
+
+
+
 
 
 If you would like to compile this source code directly then you will need [Leiningen][] 2.0.0 or above installed.
@@ -18,18 +37,10 @@ To start a web server for the application, run:
 The app should start up on port 8010
 
 ### Environment
-The service only needs one environment variable in order to function:
-    
-    SCORING-SERVICE-URL=
-    
-which, as the name suggests, is the URL to the github_scoring_service that this service will push events too via HTTP.
-If you run this service in conjunction with the github_scoring_service, as intended, then you will not need to worry about setting the environment because the docker command will handle that for us.
 
-If you wish to run the service as a stand alone application then you can set the environment in your profiles.clj if compiling with Leiningen.
 
 ***
 ## API
-There are two ways of interacting with the github_mock_event_emitter.
 
 1. **You can trigger individual events to be push to the github_scoring_service**
   
@@ -63,9 +74,3 @@ There are two ways of interacting with the github_mock_event_emitter.
           "repositories": ["<some-repository-name>", "<some-other-repository-name>", ...]
        }
     ```
-    
-    This will cause a number of events to be pushed to the github_scoring_service. 
-    
-    The total number of events is equal to the value passed in the POST body for the _number_of_events_ key. 
-    
-    For each event an event-type, user, and repository are selected at random from the entries in JSON arrays passed in the POST body for the respective entries.
