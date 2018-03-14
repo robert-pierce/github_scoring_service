@@ -144,6 +144,7 @@ You should also be able to connect to the database with the following:
 ## API
 
 - **Get a list of distinct users**
+
     If you want a list of all distinct users that have triggered github webhooks that have been pushed to this service then
     make a **GET** request to the following endpoint:
     
@@ -154,6 +155,7 @@ You should also be able to connect to the database with the following:
      > `/api/users?repository=<some-repo-name>`
      
 - **Get a list of distinct repositories**
+
     If you want a list of all distinct repositories that have had users trigger github webhooks that have been pushed to this  service then make a **GET** request to the following endpoint:
     
     > `/api/repositories`
@@ -163,6 +165,7 @@ You should also be able to connect to the database with the following:
      > `/api/repositories?users=<some-user-name>`
      
 - **Get a user's score**
+
     If you want to get a user's score then make a **GET** request to the following endpoint:
     
     > `/api/users/:users/score`
@@ -174,6 +177,7 @@ You should also be able to connect to the database with the following:
      > `/api/users/:users/score?repository=<some-repo-name>`    
      
 - **Get a user's history**
+
     If you want to get a user's history then make a **GET** request to the following endpoint:
     
     > `/api/users/:users/history`
@@ -185,6 +189,7 @@ You should also be able to connect to the database with the following:
      > `/api/users/:users/history?repository=<some-repo-name>`    
 
 - **Get the leaderboard**
+
     If you want to get a list of users ranked from highest score to lowest score then make a **GET** request to the following endpoint:
     
     > `/api/leaderboard`
@@ -194,6 +199,7 @@ You should also be able to connect to the database with the following:
      > `/api/leaderboard?repository=<some-repo-name>`  
      
 - **Health Check**
+
     If you want to query the app for a health check then make a **GET** request to the following endpoint:
     
     > `/health_check`
