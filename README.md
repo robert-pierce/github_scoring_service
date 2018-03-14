@@ -30,14 +30,14 @@ In order to locally start all three parts in conjunction follow these steps:
 2. On your local machine make sure all docker-containers running on ports 8000, 8010, and 3306 are stopped.
 3. In the project root directory run one of the following commands:
 
-`docker-compose up` 
+>`docker-compose up` 
 
 if you want the service to start in the foreground 
 (usefull for inspecting logs as the app is running)
 
 or 
 
-`docker-compose up -d` 
+>`docker-compose up -d` 
 
 if you want the service to start in the background.
 
@@ -123,6 +123,10 @@ If you start the app via docker-compose then you should be able to reach the Git
 
 >`127.0.0.1:8000`
 
+You can reach the Mock Github Event Emitter at:
+
+>`127.0.0.1:8010`
+
 You should also be able to connect to the database with the following:
 
 >`Host:127.0.0.1`
@@ -139,38 +143,57 @@ You should also be able to connect to the database with the following:
 ***
 ## API
 
-### Users
-
 - **Get a list of distinct users**
-    If you want a list of all distinct users that have triggered github webhooks that have been pushed to this service then 
+    If you want a list of all distinct users that have triggered github webhooks that have been pushed to this service then
+    make a **GET** request to the following endpoint:
     
-    To trigger individual events you need to send a **POST** request to the following endpoint:
-     
-     `/event`
-     
-     with a JSON POST body of the following form:
-     ```json
-       {
-          "type": "<some-event-type-name>",
-          "user": "<some-user-name>",
-          "repository": "<some-repository-name>"
-       }
-    ```
- 
-2. **You can trigger a batch of events to be pushed to the github_scoring_service with one request**
+    > `/api/users`
     
-    It can be a real pain to have to trigger enough event manually using the `/event` endpoint. 
+    If you want to filter these results by repository then pass in a query param like so:
     
-    To trigger many events at once you need to send a **POST** request to the following endpoint:
+     > `/api/users?repository=<some-repo-name>`
      
-     `/simulator`
+- **Get a list of distinct repositories**
+    If you want a list of all distinct repositories that have had users trigger github webhooks that have been pushed to this  service then make a **GET** request to the following endpoint:
+    
+    > `/api/repositories`
+    
+    If you want to filter these results by user then pass in a query param like so:
+    
+     > `/api/repositories?users=<some-user-name>`
      
-     with a JSON POST body of the following form:
-     ```json
-       {
-          "number_of_events": 42,
-          "types": ["<some-event-type-name>", "<some-other-event-type-name>", ...],
-          "users": ["<some-user-name>", "<some-other-user-name>", ... ],
-          "repositories": ["<some-repository-name>", "<some-other-repository-name>", ...]
-       }
-    ```
+- **Get a user's score**
+    If you want to get a user's score then make a **GET** request to the following endpoint:
+    
+    > `/api/users/:users/score`
+    
+    where `:users` is a user name.
+    
+    If you want to filter these results by repository then pass in a query param like so:
+    
+     > `/api/users/:users/score?repository=<some-repo-name>`    
+     
+- **Get a user's history**
+    If you want to get a user's history then make a **GET** request to the following endpoint:
+    
+    > `/api/users/:users/history`
+    
+    where `:users` is a user name.
+    
+    If you want to filter these results by repository then pass in a query param like so:
+    
+     > `/api/users/:users/history?repository=<some-repo-name>`    
+
+- **Get the leaderboard**
+    If you want to get a list of users ranked from highest score to lowest score then make a **GET** request to the following endpoint:
+    
+    > `/api/leaderboard`
+     
+    If you want to filter these results by repository then pass in a query param like so:
+    
+     > `/api/leaderboard?repository=<some-repo-name>`  
+     
+- **Health Check**
+    If you want to query the app for a health check then make a **GET** request to the following endpoint:
+    
+    > `/health_check`
