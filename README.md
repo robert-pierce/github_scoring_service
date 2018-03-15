@@ -2,7 +2,7 @@
 
 The Github Scoring Service is a service that will keep track of github activity and will assign a score to users of a repository based off of events triggered by a users activity. 
 
-At its heart, the Github Scoring Service is a simple HTTP server that listens for events pushed by a github webhook. Once received, an event is persisted in a database. 
+At its heart the Github Scoring Service is a simple HTTP server that listens for events pushed by a github webhook. Once received, an event is persisted in a database. 
 
 Users can then query the Github Scoring Service for information about the scores of certain users. 
 
@@ -41,11 +41,11 @@ or
 
 if you want the service to start in the background.
 
-The app should then take a couple of minutes to download all the source code, compile it, and run it. This delay will be much shorter on subsequent starts after the intial containers are built.
+The app should then take a couple of minutes to download all the source code, compile, and then run. This delay will be much shorter on subsequent starts after the intial containers are built.
 
 If successful, after docker finishes building all of the containers and invoking them you should see three services up and running when you run the following command:
 
-`docker-compose ps`
+>`docker-compose ps`
 
 
 | Name                                 | Command                     | State | Ports                              | 
@@ -76,22 +76,22 @@ If you would like to compile this source code directly then you will need [Leini
 
 To start a web server for the application run:
 
-    lein ring server-headless
+>`lein ring server-headless`
 
 The app should start up on port 8000
 
 ***
 ### Setting Up Live Github Webhooks
 
-In order to run the app to accept live github webhooks then you need to deploy it in a way that it can receive POST requests from the internet. 
+In order to run the app to accept live github webhooks then you need to deploy it in a way such that it can receive POST requests from the internet. 
 
-You will also need to set a MySQL database up by setting the environment vairables (mentioned below) and deploying it somwhere that the scoring service can connect to it. 
+You will also need to spin up a MySQL database instance and set the environment variables (mentioned below) for the Github Scoring Serive. You will then, obvously, need to host it somwhere that the scoring service can connect to it. 
 
 A fantastic way to do all this is with [Heroku](https://www.heroku.com)
 
-Once the app is properly deployed all you need to do is to go to the setting of a git repository and set up the webhook url (if you have permissions) to point to your deployed app. 
+Once the app is properly deployed all you need to do is to go to the settings of a git repository and set up the webhook url (if you have permissions) to point to your deployed app. Check out [this](https://developer.github.com/webhooks/creating) reference for info on doing this.
 
-Github will then send a POST request to your app to verify the webhook. If done correctly the app will verify the webhook (by responding with a 200), and the app will start recoding events.
+Github will then send a POST request to scoring service to verify the webhook. If done correctly the app will verify the webhook (by responding with a 200), and the service will start recoding events.
 
 ***
 ### Environment
@@ -113,9 +113,13 @@ The service only needs a few environment variables in order to function:
 
 >`CREATE-EVENT-VALUE=2`
 
-However, if you start the app via docker-compose you don't need to worry about setting any environment variables. 
+These are the initial settings. 
 
-If you would like to run the service independent of docker then you will need to set the variables in your profiles.clj.
+If you want to change the point values, for exqmple, then you can do that by altering the respective environment values.
+
+If you start the app via docker-compose you don't need to worry about setting up the environment in order to get the app to start. But if you do want to change them you can by changing the values in the `docker-env/scoring-service/server.env` directory.
+
+If you would like to run the service independent of docker then you will need to set the variables in your `profiles.clj`.
 
 ***
 ### Making Requests
@@ -135,7 +139,7 @@ You should also be able to connect to the database with the following:
 
 > `password:test`
 
-> `database: github_scoring_service`
+> `database:github_scoring_service`
 
 > `port:3306`
 
@@ -172,7 +176,7 @@ You should also be able to connect to the database with the following:
     
     > `/api/users/:user/score`
     
-    where `:users` is a user name.
+    where `:user` is a user name.
     
     If you want to filter these results by repository then pass in a query param like so:
     
@@ -185,7 +189,7 @@ You should also be able to connect to the database with the following:
     
     > `/api/users/:user/history`
     
-    where `:users` is a user name.
+    where `:user` is a user name.
     
     If you want to filter these results by repository then pass in a query param like so:
     
