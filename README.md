@@ -15,7 +15,7 @@ The easiest way to run the application is by using docker-compose. If you don't 
 
 [Install Docker](https://docs.docker.com/install)
 
-[Install docker-compose](https://docs.docker.com/compose/install)
+[Install Docker-Dompose](https://docs.docker.com/compose/install)
 
 
 **The Github Scoring Service** has three parts
